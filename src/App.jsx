@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Header from "./components/Header"
-import LoginPage from "./pages/LoginPage"
+import Login from "./components/Login" 
 import DashboardPage from './pages/DashboardPage'
+import Register from "./components/Register"
+
 
 function App(){
   const [usuario,setUsuario]= useState(null)
@@ -16,6 +18,10 @@ function App(){
   },[])
 
   const handleLogin = (usuarioData) => {
+    setUsuario(usuarioData)
+  }
+
+  const handleRegister = (usuarioData)=>{
     setUsuario(usuarioData)
   }
 
@@ -39,7 +45,17 @@ function App(){
                 usuario ? (
                   <Navigate to="/dashboard" />
                 ) : (
-                  <LoginPage onLogin={handleLogin} />
+                  <Login onLogin={handleLogin} />
+                )
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                usuario ? (
+                <Navigate to="/dashboard"/>
+                ) : (
+                  <Register onRegister={handleRegister}/>
                 )
               }
             />

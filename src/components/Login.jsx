@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { login } from "../services/api";
+import Register from "./Register";
+import { Link } from "react-router-dom";
 
 function Login({onLogin}){
     const [correo, setCorreo] = useState('')
@@ -12,22 +15,8 @@ function Login({onLogin}){
         setCargando(true)
 
         try{
-            const respuesta= await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'content-Type':'application/json',
-                },
-                body: JSON.stringify({
-                    correo: correo,
-                    contrasena: contrasena,
-                }),
-            })
-            const data = await respuesta.json()
-
-            if(!respuesta.ok){
-                setMensaje(data.error || 'Error al iniciar sesión')
-                return
-            }
+            const data= await login(correo,contrasena)
+            
             const usuarioData = {
             id: data.id,
             nombre: data.nombre,
@@ -39,13 +28,11 @@ function Login({onLogin}){
 
             // Avisar a App
             onLogin(usuarioData)
-
-        }catch(error){
-            console.error(error)
-            setMensaje('no se ha podido conectar con el servidor')
-        }finally{
-            setCargando(false)
-        }
+            }catch(error){
+                setMensaje(error.message ||'Error al iniciar sesión')
+            }finally{
+                setCargando(false)
+            }
     }
     return(
         <div>
@@ -73,10 +60,13 @@ function Login({onLogin}){
                 </div>
 
                 <button type="submit" disabled={cargando}>{cargando ? 'Entrando...' : 'Entrar'}</button>
+  
             </form>
-
             {mensaje && <p>{mensaje}</p> }
-
+            <div>
+                <p>aun no tienes una cuenta registrada?</p>
+                <Link to="/register">registrate aqui </Link>
+            </div>
         </div>
     )
 }

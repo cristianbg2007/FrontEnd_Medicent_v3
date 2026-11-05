@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { registro } from '../services/api'
+import { Link } from 'react-router-dom'
 
 function Register({ onRegister }) {
   const [nombre, setNombre] = useState('')
@@ -14,29 +16,9 @@ function Register({ onRegister }) {
     setCargando(true)
 
     try {
-      const respuesta = await fetch('http://localhost:5000/api/auth/registro', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre,
-          correo,
-          contrasena,
-          rol,
-        }),
-      })
-
-      const data = await respuesta.json()
-
-      if (!respuesta.ok) {
-        setMensaje(data.error || 'Error al registrarse')
-        return
-      }
+      const data = await registro(nombre, correo, contrasena, rol)
 
       setMensaje('Usuario registrado exitosamente. Ahora puedes iniciar sesión.')
-      
-      // Limpiar formulario
       setNombre('')
       setCorreo('')
       setContrasena('')
@@ -47,12 +29,11 @@ function Register({ onRegister }) {
         onRegister()
       }
 
-    } catch (error) {
-      console.error(error)
-      setMensaje('No se pudo conectar con el servidor')
-    } finally {
-      setCargando(false)
-    }
+      } catch (error) {
+        setMensaje(error.message||'Error al intentar registrarse')
+      } finally {
+        setCargando(false)
+      }
   }
 
   return (
@@ -108,6 +89,11 @@ function Register({ onRegister }) {
       </form>
 
       {mensaje && <p>{mensaje}</p>}
+
+        <div>
+          <p>ya tienes una cuenta?</p>
+          <Link to="/login">Inicia sesión aqui</Link>
+        </div>
     </div>
   )
 }
