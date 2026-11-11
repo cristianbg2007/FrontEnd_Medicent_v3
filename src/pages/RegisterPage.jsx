@@ -1,10 +1,10 @@
 import Register from "../components/Register";
 
-function RegisterPage({onRegister}){
+function RegisterPage(){
     return(
     <div>
       <h1>Registrate</h1>
-      <Register onRegister={onRegister} />
+      <Register/>
     </div>
   )
 }

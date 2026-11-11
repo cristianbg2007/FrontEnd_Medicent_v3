@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { registro } from '../services/api'
 import { Link } from 'react-router-dom'
 
-function Register({ onRegister }) {
+function Register() {
   const [nombre, setNombre] = useState('')
   const [correo, setCorreo] = useState('')
   const [contrasena, setContrasena] = useState('')
@@ -16,18 +16,13 @@ function Register({ onRegister }) {
     setCargando(true)
 
     try {
-      const data = await registro(nombre, correo, contrasena, rol)
+      await registro(nombre, correo, contrasena, rol)
 
       setMensaje('Usuario registrado exitosamente. Ahora puedes iniciar sesión.')
       setNombre('')
       setCorreo('')
       setContrasena('')
       setRol('paciente')
-
-      // Opcional: avisar al padre
-      if (onRegister) {
-        onRegister()
-      }
 
       } catch (error) {
         setMensaje(error.message||'Error al intentar registrarse')

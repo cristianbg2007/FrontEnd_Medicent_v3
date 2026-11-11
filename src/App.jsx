@@ -4,6 +4,9 @@ import Header from "./components/Header"
 import Login from "./components/Login" 
 import DashboardPage from './pages/DashboardPage'
 import Register from "./components/Register"
+import MedicamentosPage from "./pages/MedicamentosPage"
+import TratamientosPage from "./pages/TratamientosPage"
+import TomasPage from './pages/TomasPage'
 
 
 function App(){
@@ -21,11 +24,6 @@ function App(){
     setUsuario(usuarioData)
   }
 
-  const handleRegister = (usuarioData)=>{
-    setUsuario(usuarioData)
-  }
-
-  
   const handleLogout = () =>{
     localStorage.removeItem('token')
     localStorage.removeItem('usuario')
@@ -55,7 +53,7 @@ function App(){
                 usuario ? (
                 <Navigate to="/dashboard"/>
                 ) : (
-                  <Register onRegister={handleRegister}/>
+                  <Register/>
                 )
               }
             />
@@ -64,6 +62,36 @@ function App(){
               element={
                 usuario ? (
                   <DashboardPage usuario={usuario} onLogout={handleLogout} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route
+              path="/medicamentos"
+              element={
+                usuario ? (
+                  <MedicamentosPage />
+                ) : (
+                  <Navigate to="/login" /> 
+                )
+              }
+            />
+            <Route
+              path="tratamientos"
+              element={
+                usuario ? (
+                  <TratamientosPage/>
+                ) : (
+                  <Navigate to="/login"/>
+                )
+              }
+            />
+            <Route
+              path="/tomas"
+              element={
+                usuario ? (
+                  <TomasPage usuario={usuario} /> // Pasa el usuario aquí
                 ) : (
                   <Navigate to="/login" />
                 )
